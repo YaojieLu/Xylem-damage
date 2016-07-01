@@ -10,7 +10,7 @@ gsmaxf <- function(w,
   pxminf <- function(w){
     ps <- pe*w^(-b)
     f1 <- function(x)(ps-x)*h2*kxf(x)
-    res <- optimize(f1, c(-20000000,pe), tol=.Machine$double.eps, maximum=T)$maximum
+    res <- optimize(f1, c(-20, pe), tol=.Machine$double.eps, maximum=T)$maximum
     return(res)
   }
   

@@ -52,7 +52,7 @@ mfm <- function(w, gs, wL,
   px <- pxf(w, gs)
   kx <- kxfm(px)
   PLC <- 1-kx/kxmax
-  res <- h3*PLC
+  res <- h3*(PLC-PLCfm(0))
   return(res)
 }
 
