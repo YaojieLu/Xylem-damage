@@ -4,36 +4,22 @@
 options(digits=20)
 source("Permanent/Vulnerable plants/Functions.r")
 
-# Auxiliary function
-# Optimization among wLi < wLr
-f1 <- function(wLr){
-  averBif1 <- Vectorize(function(wLi)averBif(wLi, wLr))
-  res <- optimize(averBif1, c(0.001, wLr), tol=.Machine$double.eps, maximum=T)
-  return(res)
-}
-# Optimization among wLi > wLr
-f2 <- function(wLr){
-  averBif1 <- Vectorize(function(wLi)averBif(wLi, wLr))
-  res <- optimize(averBif1, c(wLr, 0.999), tol=.Machine$double.eps, maximum=T)
-  return(res)
-}
-
 # Results
 ca <- 400
 k <- 0.025
 MAP <- 216
 
-x <- seq(0.2160, 0.2180, by=0.0005)
+x <- seq(0.2160, 0.2180, by=0.001)
 resLmax <- vector(mode="numeric", length=length(x))
 resHmax <- vector(mode="numeric", length=length(x))
 resLvalue <- vector(mode="numeric", length=length(x))
 resHvalue <- vector(mode="numeric", length=length(x))
 
 for (i in 1:length(x)){
-  resL <- f1(x[i])
+  resL <- optbelowf(x[i])
   resLmax[i] <- resL$maximum
   resLvalue[i] <- resL$objective
-  resH <- f2(x[i])
+  resH <- optabovef(x[i])
   resHmax[i] <- resH$maximum
   resHvalue[i] <- resH$objective
   message(x[i])

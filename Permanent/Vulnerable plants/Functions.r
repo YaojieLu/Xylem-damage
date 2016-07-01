@@ -18,7 +18,7 @@ psf <- function(w, pe=-1.58*10^-3, b=4.38)pe*w^(-b)
 # pxmin(w)
 pxminf <- function(w,
                    a=1.6, nZ=0.5, p=43200, l=1.8e-5, LAI=1, h=l*a*LAI/nZ*p, VPD=0.02,
-                   pe=-1.58*10^-3, b=4.38, h2=h/1000, kxmax=5, c=9.53, d=1.28){
+                   pe=-1.58*10^-3, b=4.38, h2=l*LAI/nZ*p/1000, kxmax=5, c=9.53, d=1.28){
   
   f1 <- function(x)-((psf(w)-x)*h2*kxmax*exp(-(-x/d)^c))
   res <- optimize(f1, c(-20,0), tol=.Machine$double.eps)$minimum
@@ -28,7 +28,7 @@ pxminf <- function(w,
 # intact gsmax
 gsmaxf <- function(w,
                    a=1.6, nZ=0.5, p=43200, l=1.8e-5, LAI=1, h=l*a*LAI/nZ*p, VPD=0.02,
-                   pe=-1.58*10^-3, b=4.38, h2=h/1000, kxmax=5, c=9.53, d=1.28){
+                   pe=-1.58*10^-3, b=4.38, h2=l*LAI/nZ*p/1000, kxmax=5, c=9.53, d=1.28){
   
   # xylem conductance function
   kxf <- function(x)kxmax*exp(-(-x/d)^c)
@@ -47,7 +47,7 @@ gsmaxf <- function(w,
 # family ESS
 gswLf <- function(w, wL,
                   a=1.6, nZ=0.5, p=43200, l=1.8e-5, LAI=1, h=l*a*LAI/nZ*p, VPD=0.02,
-                  pe=-1.58*10^-3, b=4.38, h2=h/1000, kxmax=5, c=9.53, d=1.28){
+                  pe=-1.58*10^-3, b=4.38, h2=l*LAI/nZ*p/1000, kxmax=5, c=9.53, d=1.28){
   # xylem conductance function
   kxf <- function(x)kxmax*exp(-(-x/d)^c)
   
@@ -59,7 +59,7 @@ gswLf <- function(w, wL,
 # family ESS as px(w)
 pxwLf <- function(w, wL,
                   a=1.6, nZ=0.5, p=43200, l=1.8e-5, LAI=1, h=l*a*LAI/nZ*p, VPD=0.02,
-                  h2=h/1000, kxmax=5, c=9.53, d=1.28){
+                  h2=l*LAI/nZ*p/1000, kxmax=5, c=9.53, d=1.28){
   
   # xylem conductance function
   kxf <- function(x)kxmax*exp(-(-x/d)^c)
@@ -83,7 +83,7 @@ Af <- function(gs, Vcmax=50, cp=30, Km=703, Rd=1, LAI=1){LAI*1/2*(Vcmax+(Km+ca)*
 # averBi
 averBif <- function(wLi, wLr,
                     a=1.6, nZ=0.5, p=43200, l=1.8e-5, LAI=1, h=l*a*LAI/nZ*p, VPD=0.02,
-                    pe=-1.58*10^-3, b=4.38, h2=h/1000, kxmax=5, c=9.53, d=1.28,
+                    pe=-1.58*10^-3, b=4.38, h2=l*LAI/nZ*p/1000, kxmax=5, c=9.53, d=1.28,
                     gamma=1/((MAP/365/k)/1000)*nZ){
   
   gswLfr <- function(w)ifelse(w<wLr+1e-10, 0, gswLf(w, wLr))
@@ -103,5 +103,19 @@ averBif <- function(wLi, wLr,
   res1 <- integrate(f2, wLr+1e-10, 1, rel.tol=.Machine$double.eps^0.3)
   res2 <- fL*Af(gswLfi(wLr+1e-10))
   res <- res1$value+res2
+  return(res)
+}
+
+# [0, wLr]
+optbelowf <- function(wLr){
+  averBif1 <- Vectorize(function(wLi)averBif(wLi, wLr))
+  res <- optimize(averBif1, c(0.001, wLr), tol=.Machine$double.eps, maximum=T)
+  return(res)
+}
+
+# [wLr, 1]
+optabovef <- function(wLr){
+  averBif1 <- Vectorize(function(wLi)averBif(wLi, wLr))
+  res <- optimize(averBif1, c(wLr, 0.999), tol=.Machine$double.eps, maximum=T)
   return(res)
 }
