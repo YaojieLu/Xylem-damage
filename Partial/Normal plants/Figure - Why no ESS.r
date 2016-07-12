@@ -17,5 +17,9 @@ plot(datal$wLr, datal$resLmax, xlim=c(0.14, 0.22), lwd=2, ylim=c(0.14, 0.22), ty
 points(datah$wLr, datah$resHmax, type="l", cex.lab=1.3, col="red", lwd=2)
 abline(a=0, b=1, lwd=1)
 
-legend("bottomright", title="Optimize between", expression("[0, "*italic(w[Lr])*"]", "["*italic(w[Lr])*", 1]"),
+legend("bottomright", title="Optimize between", expression("(0, "*italic(w[Lr])*"]", "["*italic(w[Lr])*", 1]"),
        lty=c(1, 1), lwd=c(2, 2), col=c("blue", "red"))
+
+box()
+
+dev.copy2pdf(file = "Figures/Figure 11.pdf")

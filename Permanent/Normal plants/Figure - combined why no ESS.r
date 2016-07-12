@@ -37,7 +37,7 @@ with(data.frame(wLr=wLr[3]), {
   text(wLr+0.004, 0.21, "d", cex=1.5)
 })
 text(0.14+0.1*0.05, 0.24-0.1*0.06, "a", cex=1.5)
-legend("bottomright", title="Optimum within", expression("[0, "*italic(w[Lr])*"]", "["*italic(w[Lr])*", 1]"),
+legend("bottomright", title="Optimum within", expression("(0, "*italic(w[Lr])*"]", "["*italic(w[Lr])*", 1]"),
        lty=c(1, 1), lwd=c(2, 2), col=c("blue", "red"))
 box()
 
