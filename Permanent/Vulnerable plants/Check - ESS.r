@@ -8,7 +8,7 @@ source("Permanent/Vulnerable plants/Functions.r")
 f3 <- function(wLr){
   res1 <- optbelowf(wLr)$maximum
   res2 <- optabovef(wLr)$maximum
-  res <- abs(res1-wLr)+abs(res2-wLr)
+  res <- res2-res1
   return(res)
 }
 # Results
@@ -18,5 +18,5 @@ MAP <- 222
 
 res <- optimize(f3, c(0.215, 0.225), tol=.Machine$double.eps)
 res
-optbelowf(res$minimum)
-optabovef(res$minimum)
+#optbelowf(res$minimum)
+#optabovef(res$minimum)

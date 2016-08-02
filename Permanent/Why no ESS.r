@@ -43,7 +43,7 @@ f1 <- function(wLr){
   averBif1 <- Vectorize(function(wLi)averBif(wLi, wLr))
   resL <- optimize(averBif1, c(0.1, wLr), tol=.Machine$double.eps, maximum=T)$maximum
   resH <- optimize(averBif1, c(wLr, 0.2), tol=.Machine$double.eps, maximum=T)$maximum
-  res <- resH-resL
+  res <- abs(resH-wLr)+abs(resL-wLr)
   return(res)
 }
 f2 <- Vectorize(f1)
