@@ -23,5 +23,6 @@ g <- function(w)1/(1e-5*(w-0.25)^0.9)
 curve(g, 0.25, 0.25+1e-12)
 curve(f, 0.25, 0.25+1e-12, add=T, col="red")
 
-integrate(g, 0.25, 0.25+1e-5, rel.tol=.Machine$double.eps^0.43)
-integrate(f, 0.25, 0.25+1e-5, rel.tol=.Machine$double.eps^0.03)
+integrate(g, 0.25, 0.25+1e-5, rel.tol=.Machine$double.eps^0.25)
+integrate(f, 0.25, 0.25+1e-5, rel.tol=.Machine$double.eps^0.25)
+integrate(f, 0.25, 0.25+1e-5, rel.tol=.Machine$double.eps^0.01)
