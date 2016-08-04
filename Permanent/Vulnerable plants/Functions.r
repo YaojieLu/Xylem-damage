@@ -1,6 +1,8 @@
 
 ################################ Permanent ################################
 ############################ Vulnerable plants ############################
+library("pracma")
+
 # xylem conductance function
 kxf <- function(px, kxmax=5, c=9.53, d=1.28)kxmax*exp(-(-px/d)^c)
 #kxf <- function(px, kxmax=5, c=2.64, d=3.54)kxmax*exp(-(-px/d)^c)
@@ -68,16 +70,17 @@ averBif <- function(wLi, wLr,
   
   Ef <- function(w)h*VPD*gswLfr(w)
   rEf <- function(w)1/Ef(w)
-  integralrEf <- Vectorize(function(w)integrate(rEf, w, 1, rel.tol=.Machine$double.eps^0.5)$value)
+  integralrEf <- Vectorize(function(w)quadinf(rEf, w, 1)$Q)
   fnoc <- function(w)1/Ef(w)*exp(-gamma*(w-wLr)/(1-wLr)-k*1/(1-wLr)*integralrEf(w))*1/(1-wLr)
   fA <- function(w)Af(gswLfi(w))*cPDF*fnoc(w)
   
-  fLnoc <- 1/k*exp(-k*1/(1-wLr)*integralrEf(wLr+1e-10))
-  cPDF <- 1/(fLnoc+integrate(fnoc, wLr+1e-10, 1, rel.tol=.Machine$double.eps^0.5)$value)
+  fLnoc <- 1/k*exp(-k*1/(1-wLr)*integralrEf(wLr))
+  
+  cPDF <- 1/(fLnoc+quadinf(fnoc, wLr, 1)$Q)
   fL <- cPDF*fLnoc
-  res1 <- integrate(fA, wLr+1e-10, 1, rel.tol=.Machine$double.eps^0.3)
-  res2 <- fL*Af(gswLfi(wLr+1e-10))
-  res <- res1$value+res2
+  res1 <- quadinf(fA, wLr, 1)
+  res2 <- fL*Af(gswLfi(wLr))
+  res <- res1$Q+res2
   return(res)
 }
 
@@ -104,11 +107,12 @@ fLf <- function(wL,
   gswf <- Vectorize(function(w)gswLf(w, wL))
   Ef <- function(w)h*VPD*gswf(w)
   rEf <- function(w)1/Ef(w)
-  integralrEf <- Vectorize(function(w)integrate(rEf, w, 1, rel.tol=.Machine$double.eps^0.5)$value)
+  integralrEf <- Vectorize(function(w)quadinf(rEf, w, 1)$Q)
   fnoc <- function(w)1/Ef(w)*exp(-gamma*(w-wL)/(1-wL)-k*1/(1-wL)*integralrEf(w))*1/(1-wL)
   
-  fLnoc <- 1/k*exp(-k*1/(1-wL)*integralrEf(wL+1e-10))
-  cPDF <- 1/(fLnoc+integrate(fnoc, wL+1e-10, 1, rel.tol=.Machine$double.eps^0.5)$value)
+  fLnoc <- 1/k*exp(-k*1/(1-wL)*integralrEf(wL))
+  cPDF <- 1/(fLnoc+quadinf(fnoc, wL, 1)$Q)
   fL <- cPDF*fLnoc
+  browser()
   return(fL)
 }

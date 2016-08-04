@@ -9,5 +9,5 @@ k <- 0.05
 MAP <- 222
 
 fLf1 <- Vectorize(fLf)
-fLf1(0.208)
+fLf1(0.227)
 curve(fLf1, 0.21, 0.3)

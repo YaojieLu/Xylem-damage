@@ -9,7 +9,7 @@ ca <- 400
 k <- 0.025
 MAP <- 216
 
-x <- seq(0.21, 0.51, by=0.01)
+x <- seq(0.218, 0.219, by=0.0002)
 resLmax <- vector(mode="numeric", length=length(x))
 resHmax <- vector(mode="numeric", length=length(x))
 resLvalue <- vector(mode="numeric", length=length(x))
