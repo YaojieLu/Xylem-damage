@@ -18,7 +18,7 @@ f2 <- Vectorize(f1)
 pkx <- 0.9
 ca <- 400
 k <- 0.025
-MAP <- 365
+MAP <- 3000
 
 x <- seq(0.14, 0.22, by=0.001)
 res1 <- f2(x)
